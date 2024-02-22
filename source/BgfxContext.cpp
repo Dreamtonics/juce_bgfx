@@ -141,6 +141,7 @@ void BgfxContext::Overlay::mouseMagnify (const MouseEvent& event, float scaleFac
 BgfxContext::BgfxContext()
 {
 #if JUCE_MAC
+    embeddedView.reset(new juce::NSViewComponent());
     overlay.addToDesktop (ComponentPeer::windowRepaintedExplictly);
 #endif
 }
@@ -170,7 +171,7 @@ void BgfxContext::attachTo (juce::Component* component)
         attachedComponent = component;
         attachedComponent->addComponentListener (this);
 #if JUCE_MAC
-        attachedComponent->addAndMakeVisible (embeddedView);
+        attachedComponent->addAndMakeVisible (embeddedView.get());
 #elif JUCE_WINDOWS
         attachedComponent->addAndMakeVisible (overlay);
 #endif
@@ -184,7 +185,7 @@ void BgfxContext::detach()
     {
         attachedComponent->removeComponentListener (this);
 #if JUCE_MAC
-        attachedComponent->removeChildComponent (&embeddedView);
+        attachedComponent->removeChildComponent (embeddedView.get());
 #endif
         attachedComponent = nullptr;
         overlay.setForwardComponent (nullptr);
@@ -287,7 +288,7 @@ void BgfxContext::init (float scaleFactor, bool showRenderStats)
     bgfx::setViewMode (0, bgfx::ViewMode::Sequential);
 
 #if JUCE_MAC
-    embeddedView.setView (peer->getNativeHandle());
+    embeddedView->setView (peer->getNativeHandle());
 #endif
 
     initialised = true;
@@ -305,7 +306,7 @@ void BgfxContext::trackOverlay (bool moved, bool resized)
     {
         juce::Rectangle<int> bounds (0, 0, attachedComponent->getWidth(), attachedComponent->getHeight());
 #if JUCE_MAC
-        embeddedView.setBounds (bounds);
+        (*embeddedView).setBounds (bounds);
 #elif JUCE_WINDOWS
 
         overlay.setBounds (bounds); // TODO: Do we need to do this?

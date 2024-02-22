@@ -8,6 +8,9 @@
 
 #include "BgfxComponent.h"
 #include "NanovgGraphics.h"
+#include <nanovg.h>
+
+class NanovgGraphicsContext;
 
 /**
     JUCE UI component rendered usin nanovg/bgfx.
@@ -34,5 +37,5 @@ private:
     NVGcontext* nvg {nullptr};
     std::unique_ptr<NanovgGraphicsContext> nvgGraphicsContext {nullptr};
 
-    Colour backgroundColour {};
+    juce::Colour backgroundColour {};
 };

@@ -34,16 +34,16 @@ static uint64_t getImageHash (const Image& image)
     return (uint64_t) src.data;
 }
 
-static const char* getResourceByFileName(const String& fileName, int& size)
-{
-    for (int i = 0; i < BinaryData::namedResourceListSize; ++i)
-    {
-        if (String(BinaryData::originalFilenames[i]) == fileName)
-            return BinaryData::getNamedResource(BinaryData::namedResourceList[i], size);
-    }
+// static const char* getResourceByFileName(const String& fileName, int& size)
+// {
+//     for (int i = 0; i < juce::BinaryData::namedResourceListSize; ++i)
+//     {
+//         if (String(BinaryData::originalFilenames[i]) == fileName)
+//             return BinaryData::getNamedResource(BinaryData::namedResourceList[i], size);
+//     }
 
-    return nullptr;
-}
+//     return nullptr;
+// }
 
 //==============================================================================
 
@@ -60,7 +60,7 @@ NanovgGraphicsContext::NanovgGraphicsContext (NVGcontext* nanovgContext, int w, 
 {
     jassert (nvg != nullptr);
 
-    loadFontFromResources(defaultTypefaceName);
+//    loadFontFromResources(defaultTypefaceName);
 }
 
 NanovgGraphicsContext::~NanovgGraphicsContext()
@@ -365,43 +365,43 @@ void NanovgGraphicsContext::removeCachedImages()
     images.clear();
 }
 
-bool NanovgGraphicsContext::loadFontFromResources (const String& typefaceName)
-{
-    auto it = loadedFonts.find (typefaceName);
+// bool NanovgGraphicsContext::loadFontFromResources (const String& typefaceName)
+// {
+//     auto it = loadedFonts.find (typefaceName);
 
-    if (it != loadedFonts.end())
-    {
-        currentGlyphToCharMap = &it->second;
-        return true; // Already loaded
-    }
+//     if (it != loadedFonts.end())
+//     {
+//         currentGlyphToCharMap = &it->second;
+//         return true; // Already loaded
+//     }
 
-    int size{};
-    String resName {typefaceName + ".ttf"};
-    const auto* ptr {getResourceByFileName(resName, size)};
+//     int size{};
+//     String resName {typefaceName + ".ttf"};
+//     const auto* ptr {getResourceByFileName(resName, size)};
 
-    if (ptr != nullptr && size > 0)
-    {
-        const int id = nvgCreateFontMem (nvg, typefaceName.toRawUTF8(),
-                                         (unsigned char*)ptr, size,
-                                         0 // Tell nvg to take ownership of the font data
-                                        );
+//     if (ptr != nullptr && size > 0)
+//     {
+//         const int id = nvgCreateFontMem (nvg, typefaceName.toRawUTF8(),
+//                                          (unsigned char*)ptr, size,
+//                                          0 // Tell nvg to take ownership of the font data
+//                                         );
 
-        if (id >= 0)
-        {
-            Font tmpFont (Typeface::createSystemTypefaceFor (ptr, size));
-            loadedFonts[typefaceName] = getGlyphToCharMapForFont (tmpFont);
-            currentGlyphToCharMap = &loadedFonts[typefaceName];
-            return true;
-        }
-    }
-    else
-    {
-        std::cerr << "Unabled to load " << resName << "\n";
-    }
+//         if (id >= 0)
+//         {
+//             Font tmpFont (Typeface::createSystemTypefaceFor (ptr, size));
+//             loadedFonts[typefaceName] = getGlyphToCharMapForFont (tmpFont);
+//             currentGlyphToCharMap = &loadedFonts[typefaceName];
+//             return true;
+//         }
+//     }
+//     else
+//     {
+//         std::cerr << "Unabled to load " << resName << "\n";
+//     }
 
-    return false;
+//     return false;
 
-}
+// }
 
 
 void NanovgGraphicsContext::applyFillType()
@@ -460,9 +460,9 @@ void NanovgGraphicsContext::applyFont()
     String name {font.getTypeface()->getName()};
     name << "-" << font.getTypefaceStyle();
 
-    if (loadFontFromResources (name))
-        nvgFontFace (nvg, name.toUTF8());
-    else
+//    if (loadFontFromResources (name))
+//        nvgFontFace (nvg, name.toUTF8());
+//    else
         nvgFontFace (nvg, defaultTypefaceName.toRawUTF8());
 
     nvgFontSize (nvg, font.getHeight());

@@ -6,6 +6,10 @@
 
 #include <JuceHeader.h>
 
+namespace juce {
+    class NSViewComponent;
+}
+
 /**
     Bgfx context is a low-level binding between bgfx
     and the native window system. The implementation is
@@ -33,23 +37,23 @@ public:
         void setForwardComponent (juce::Component*) noexcept;
 
         // juce::Component
-        void mouseMove        (const MouseEvent&) override;
-        void mouseEnter       (const MouseEvent&) override;
-        void mouseExit        (const MouseEvent&) override;
-        void mouseDown        (const MouseEvent&) override;
-        void mouseDrag        (const MouseEvent&) override;
-        void mouseUp          (const MouseEvent&) override;
-        void mouseDoubleClick (const MouseEvent&) override;
-        void mouseWheelMove   (const MouseEvent&, const MouseWheelDetails&) override;
-        void mouseMagnify     (const MouseEvent&, float scaleFactor) override;
+        void mouseMove        (const juce::MouseEvent&) override;
+        void mouseEnter       (const juce::MouseEvent&) override;
+        void mouseExit        (const juce::MouseEvent&) override;
+        void mouseDown        (const juce::MouseEvent&) override;
+        void mouseDrag        (const juce::MouseEvent&) override;
+        void mouseUp          (const juce::MouseEvent&) override;
+        void mouseDoubleClick (const juce::MouseEvent&) override;
+        void mouseWheelMove   (const juce::MouseEvent&, const juce::MouseWheelDetails&) override;
+        void mouseMagnify     (const juce::MouseEvent&, float scaleFactor) override;
 
     private:
 
         juce::ComponentPeer* beginForward();
         void endForward();
-        void forwardMouseEvent (const MouseEvent&);
-        void forwardMouseWheelEvent (const MouseEvent&, const MouseWheelDetails&);
-        void forwardMouseMagnifyEvent (const MouseEvent&, float scaleFactor);
+        void forwardMouseEvent (const juce::MouseEvent&);
+        void forwardMouseWheelEvent (const juce::MouseEvent&, const juce::MouseWheelDetails&);
+        void forwardMouseMagnifyEvent (const juce::MouseEvent&, float scaleFactor);
 
         juce::Component* forwardComponent {nullptr};
         bool forwarding {false};
@@ -78,7 +82,7 @@ public:
         The background colour is used upon bgfx context creation and
         re-creation. Once created the backround colour does not change.
     */
-    void setBackgroundColour (const Colour& c);
+    void setBackgroundColour (const juce::Colour& c);
 
     bool isInitialised() const noexcept { return initialised; }
     float getScaleFactor() const noexcept { return scale; }
@@ -107,9 +111,9 @@ private:
     Overlay overlay{};
 
 #if JUCE_MAC
-    NSViewComponent embeddedView;
+    std::unique_ptr<juce::NSViewComponent> embeddedView{nullptr};
 #elif JUCE_WINDOWS
-    std::unique_ptr<ComponentPeer> nativeWindow {nullptr};
+    std::unique_ptr<juce::ComponentPeer> nativeWindow {nullptr};
 #else
 #   error Unsupported platform
 #endif

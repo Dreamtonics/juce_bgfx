@@ -20,14 +20,14 @@ class BgfxComponent : public juce::Component,
 {
 public:
 
-    class RenderCache : public CachedComponentImage,
-                        private AsyncUpdater
+    class RenderCache : public juce::CachedComponentImage,
+                        private juce::AsyncUpdater
     {
     public:
         RenderCache (BgfxComponent& comp);
         ~RenderCache();
 
-        void paint (Graphics&) override;
+        void paint (juce::Graphics&) override;
         bool invalidateAll() override;
         bool invalidate (const juce::Rectangle<int>&) override;
         void releaseResources() override;
@@ -45,13 +45,13 @@ public:
 
     bool isInitialised() const;
 
-    void setBackgroundColour (Colour c);
+    void setBackgroundColour (juce::Colour c);
     void enableRenderStats();
     void startPeriodicRepaint(int fps = 30);
     void stopPeriodicRepaint();
 
     // Component is opaque and JUCE requires it to implement paint method.
-    void paint (Graphics&) override {}
+    void paint (juce::Graphics&) override {}
 
     virtual void renderFrame() {}
 
@@ -68,6 +68,6 @@ private:
     BgfxContext bgfxContext;
     bool currentlyPainting {false};
 
-    Colour backgroundColour {};
+    juce::Colour backgroundColour {};
     bool showRenderStats {false};
 };
