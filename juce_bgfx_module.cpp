@@ -2,3 +2,5 @@
 #include "source/BgfxComponent.cpp"
 #include "source/BgfxContext.cpp"
 #include "source/NanovgComponent.cpp"
+#include "nanovg/nanovg.cpp"
+#include "nanovg/nanovg_bgfx.cpp"

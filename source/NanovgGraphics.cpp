@@ -6,8 +6,8 @@
 
 //==============================================================================
 
-#define STB_TRUETYPE_IMPLEMENTATION
-#include <stb/stb_truetype.h>
+//#define STB_TRUETYPE_IMPLEMENTATION
+//#include <stb/stb_truetype.h>
 
 //==============================================================================
 
@@ -127,7 +127,7 @@ Rectangle<int> NanovgGraphicsContext::getClipBounds() const
     float w = width;
     float h = height;
 
-    nvgCurrentScissor (nvg, &x, &y, &w, &h);
+//    nvgCurrentScissor (nvg, &x, &y, &w, &h);
     return Rectangle<int>((int)x, (int)y, (int)w, (int)h);
 }
 
@@ -138,7 +138,7 @@ bool NanovgGraphicsContext::isClipEmpty() const
     float w = -1.0f;
     float h = -1.0f;
 
-    nvgCurrentScissor (nvg, &x, &y, &w, &h);
+//    nvgCurrentScissor (nvg, &x, &y, &w, &h);
     return w < 0.0f || h < 0.0f;
 }
 
